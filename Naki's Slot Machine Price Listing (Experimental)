@@ -1,0 +1,218 @@
+@name Naki's Slot Machine Price Listing
+@inputs Base:entity Line1 Line2 Line3 Line4 Line5 Line6 WinPrice
+@persist [L1 L2 L3 L4 L5 L6]:array
+@outputs String:string [L1 L2 L3 L4 L5 L6]:array
+
+if(first()){
+    for(I=1,24){
+        holoCreate(I)
+        holoScale(I,vec(0.12))
+        holoParent(I,Base)
+        holoAng(I,Base:toWorld(ang(0,0,90)))
+        if(I>18){
+            holoModel(I,"models/sprops/misc/alphanum/alphanum_dlsign.mdl")
+            holoColor(I,vec(0,175,0))
+        }else{
+            holoModel(I,"models/sprops/misc/alphanum/alphanum_0.mdl")
+        }
+    }
+    holoPos(1,Base:toWorld(vec(10-3,0,0.7)))
+    holoPos(2,Base:toWorld(vec(10-1.5,0,0.7)))
+    holoPos(3,Base:toWorld(vec(10,0,0.7)))
+    for(I=1,3){
+        holoColor(I,vec(255,0,(255/6)*1)*1)
+    }
+    
+    holoPos(4,Base:toWorld(vec(10-1.5,0+3,0.7)))
+    holoPos(5,Base:toWorld(vec(10-3,0+3,0.7)))
+    holoPos(6,Base:toWorld(vec(10,0+3,0.7)))
+    for(I=4,6){
+        holoColor(I,vec(255,0,(255/6)*2)*0.9)
+    }
+    
+    holoPos(7,Base:toWorld(vec(0,0,0.7)))
+    holoPos(8,Base:toWorld(vec(0-1.5,0,0.7)))
+    holoPos(9,Base:toWorld(vec(0+1.5,0,0.7)))
+    for(I=7,9){
+        holoColor(I,vec(255,0,(255/6)*3)*0.8)
+    }
+    
+    holoPos(10,Base:toWorld(vec(0,0+3,0.7)))
+    holoPos(11,Base:toWorld(vec(0-1.5,0+3,0.7)))
+    holoPos(12,Base:toWorld(vec(0+1.5,0+3,0.7)))
+    for(I=10,12){
+        holoColor(I,vec(255,0,(255/6)*4)*0.7)
+    }
+    
+    holoPos(13,Base:toWorld(vec(-7,0,0.7)))
+    holoPos(14,Base:toWorld(vec(-7-1.5,0,0.7)))
+    holoPos(15,Base:toWorld(vec(-7-3,0,0.7)))
+    for(I=13,15){
+        holoColor(I,vec(255,0,(255/6)*5)*0.6)
+    }
+    
+    holoPos(16,Base:toWorld(vec(-7,0+3,0.7)))
+    holoPos(17,Base:toWorld(vec(-7-1.5,0+3,0.7)))
+    holoPos(18,Base:toWorld(vec(-7-3,0+3,0.7)))
+    for(I=16,18){
+        holoColor(I,vec(255,0,(255/6)*6)*0.5)
+    }
+    
+    holoPos(19,Base:toWorld(vec(10-4.5,0,0.7)))
+    holoBodygroup(19,0,1)
+    
+    holoPos(20,Base:toWorld(vec(10-4.5,0+3,0.7)))
+    holoBodygroup(20,0,1)
+    
+    holoPos(21,Base:toWorld(vec(0-3,0,0.7)))
+    holoBodygroup(21,0,1)
+    
+    holoPos(22,Base:toWorld(vec(0-3,0+3,0.7)))
+    holoBodygroup(22,0,1)
+    
+    holoPos(23,Base:toWorld(vec(-7-4.5,0,0.7)))
+    holoBodygroup(23,0,1)
+    
+    holoPos(24,Base:toWorld(vec(-7-4.5,0+3,0.7)))
+    holoBodygroup(24,0,1)
+    
+    timer("update",100)
+    timer("text",1000)
+}
+
+interval(100)
+
+String="Last Win: "+round(WinPrice)+"$"
+
+if(changed(Line1)&Line1){
+timer("update",100)
+}
+
+if(clk("update")){
+    L1=round(Line1):toString():explode("")
+    L2=round(Line2):toString():explode("")
+    L3=round(Line3):toString():explode("")
+    L4=round(Line4):toString():explode("")
+    L5=round(Line5):toString():explode("")
+    L6=round(Line6):toString():explode("")
+    for(I=1,3){
+        holoModel(I,"models/sprops/misc/alphanum/alphanum_"+L1[I,string]:toNumber()+".mdl")
+        I2=I+3
+        holoModel(I2,"models/sprops/misc/alphanum/alphanum_"+L2[I,string]:toNumber()+".mdl")
+        I3=I2+3
+        holoModel(I3,"models/sprops/misc/alphanum/alphanum_"+L3[I,string]:toNumber()+".mdl")
+        I4=I3+3
+        holoModel(I4,"models/sprops/misc/alphanum/alphanum_"+L4[I,string]:toNumber()+".mdl")
+        I5=I4+3
+        holoModel(I5,"models/sprops/misc/alphanum/alphanum_"+L5[I,string]:toNumber()+".mdl")
+        I6=I5+3
+        holoModel(I6,"models/sprops/misc/alphanum/alphanum_"+L6[I,string]:toNumber()+".mdl")
+    }
+}
+
+if(clk("text")){
+    holoCreate(25)
+    holoScale(25,vec(0.2))
+    holoParent(25,Base)
+    holoModel(25,"models/sprops/misc/alphanum/alphanum_p.mdl")
+    holoPos(25,Base:toWorld(vec(5,-3,0.7)))
+    holoAng(25,Base:toWorld(ang(0,0,90)))
+    
+    holoCreate(26)
+    holoScale(26,vec(0.2))
+    holoParent(26,Base)
+    holoModel(26,"models/sprops/misc/alphanum/alphanum_r.mdl")
+    holoPos(26,Base:toWorld(vec(5-2,-3,0.7)))
+    holoAng(26,Base:toWorld(ang(0,0,90)))
+    
+    holoCreate(27)
+    holoScale(27,vec(0.2))
+    holoParent(27,Base)
+    holoModel(27,"models/sprops/misc/alphanum/alphanum_i.mdl")
+    holoPos(27,Base:toWorld(vec(5-4,-3,0.7)))
+    holoAng(27,Base:toWorld(ang(0,0,90)))
+    
+    holoCreate(28)
+    holoScale(28,vec(0.2))
+    holoParent(28,Base)
+    holoModel(28,"models/sprops/misc/alphanum/alphanum_c.mdl")
+    holoPos(28,Base:toWorld(vec(5-6,-3,0.7)))
+    holoAng(28,Base:toWorld(ang(0,0,90)))
+    
+    holoCreate(29)
+    holoScale(29,vec(0.2))
+    holoParent(29,Base)
+    holoModel(29,"models/sprops/misc/alphanum/alphanum_e.mdl")
+    holoPos(29,Base:toWorld(vec(5-8,-3,0.7)))
+    holoAng(29,Base:toWorld(ang(0,0,90)))
+    
+    holoCreate(30)
+    holoScale(30,vec(0.2))
+    holoParent(30,Base)
+    holoModel(30,"models/sprops/misc/alphanum/alphanum_s.mdl")
+    holoPos(30,Base:toWorld(vec(5-10,-3,0.7)))
+    holoAng(30,Base:toWorld(ang(0,0,90)))
+    
+    for(I=1,6){
+        I2=I+24
+        holoColor(I2,vec(125,255,255))
+    }
+    
+    holoCreate(31)
+    holoParent(31,Base)
+    holoPos(31,Base:toWorld(vec(-5.5,0,0.85)))
+    holoAng(31,Base:toWorld(ang(0,90,0)))
+    holoModel(31,"models/sprops/cylinders/size_5/cylinder_12x3.mdl")
+    holoScale(31,vec(0.13))
+    holoColor(31,vec(255,125,0))
+    holoMaterial(31,"models/debug/debugwhite")
+    
+    holoCreate(32)
+    holoParent(32,Base)
+    holoPos(32,Base:toWorld(vec(11.5,3.8,0.7)))
+    holoAng(32,Base:toWorld(ang(0,0,90)))
+    holoModel(32,"models/balloons/balloon_classicheart.mdl")
+    holoScale(32,vec(0.09,0.05,0.09))
+    holoColor(32,vec(255,0,0))
+    holoMaterial(32,"models/debug/debugwhite")
+    
+    holoCreate(33)
+    holoParent(33,Base)
+    holoPos(33,Base:toWorld(vec(3,0,0.7)))
+    holoAng(33,Base:toWorld(ang(0,0,90)))
+    holoModel(33,"models/sprops/misc/alphanum/alphanum_dlsign.mdl")
+    holoBodygroup(33,0,1)
+    holoColor(33,vec(255,255,0))
+    holoScale(33,vec(0.12))
+    
+    holoCreate(34)
+    holoParent(34,Base)
+    holoPos(34,Base:toWorld(vec(11.5,-0.4,0.85)))
+    holoAng(34,Base:toWorld(ang(0,0,90)))
+    holoModel(34,"models/sprops/misc/alphanum/alphanum_7.mdl")
+    holoBodygroup(34,0,2)
+    holoColor(34,vec(255,0,0))
+    holoScale(34,vec(0.13))
+    
+    holoCreate(35)
+    holoParent(35,Base)
+    holoPos(35,Base:toWorld(vec(3,2.7,0.6)))
+    holoAng(35,Base:toWorld(ang(0,-45,90)))
+    holoModel(35,"models/sprops/geometry/qdisc_12.mdl")
+    holoMaterial(35,"models/debug/debugwhite")
+    holoScale(35,vec(0.2))
+    holoColor(35,vec(0,255,255))
+    
+    holoCreate(36)
+    holoParent(36,Base)
+    holoPos(36,Base:toWorld(vec(-5.5,3,0.85)))
+    holoAng(36,Base:toWorld(ang(0,90,0)))
+    holoModel(36,"models/sprops/misc/games/cards_diamonds.mdl")
+    holoSkin(36,12)
+    holoScale(36,vec(0.15))
+    
+}
+
+if(dupefinished()){
+    reset()
+}
