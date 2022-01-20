@@ -1,0 +1,58 @@
+@name Naki's Slot Machine Lever
+@inputs Button Spinning Base:entity Lever:entity LeverCover:entity Spins On
+@outputs Val
+@persist Val Turn
+if(first()){
+    holoCreate(1,Lever:toWorld(vec(0,0,0)),vec(0),Lever:toWorld(ang(0,0,0)),vec(255),"cube")
+    local Children=Lever:children()
+    Lever:parentTo(holoEntity(1))
+    holoPos(1,LeverCover:toWorld(vec(0,0,-3)))
+    holoAng(1,Base:toWorld(ang(0,0,0)))
+    holoParent(1,Base)
+    for(I=1,Children:count()){
+        Children[I,entity]:parentTo(Lever)
+    }
+}
+
+interval(100)
+
+if(Button*(!Spinning)*(Spins>0)*On){
+    Turn=1
+}
+
+if(changed(Turn)&Turn){
+    Base:soundPlay("lever",4,"buttons/lever7.wav")
+}
+
+if(changed(Spinning)){
+    if(Spinning){
+        Base:soundPlay("wheels",0,"physics/metal/paintcan_roll_loop1.wav")
+    }else{
+        Base:soundPlay("wheels",0,"")
+    }
+}
+
+if(Turn){
+    if(Val<100){
+        Val+=100/6
+    }
+}else{
+    if(Val>0){
+        Val-=100/6
+    }
+}
+if(Val>100){
+    Val=100
+    Turn=0
+}
+if(Val==100){
+    Turn=0
+}
+if(Val<0){
+    Val=0
+}
+holoAng(1,Base:toWorld(ang(0,90,35*(Val/100))))
+
+if(dupefinished()){
+    reset()
+}
