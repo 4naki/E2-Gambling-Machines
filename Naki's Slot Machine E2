@@ -1,0 +1,279 @@
+@name Naki's Slot Machine
+@inputs Base:entity Button1 Button2 Button3 Spin Start Stop FrontPanel:entity
+@persist On BalanceIn Spins Spinning DefAng I1 I2 I3 I1Stop I2Stop I3Stop I1Target I2Target I3Target FaceCount SpinSpeed Price Ready TotalSpins Gained Profit Lost
+@persist Line1 Line2 Line3 Line4 Line5 Line6 WinPrice Array:array
+@outputs BalanceIn Spins Line1 Line2 Line3 Line4 Line5 Line6 I1 I2 I3 WinPrice Spinning On TotalSpins Profit Gained Lost
+@trigger none
+
+interval(50)
+
+if(first()){
+    
+    for(I=1,3){
+        holoCreate(I)
+        holoModel(I,"models/sprops/geometry/fhex_12.mdl")
+        holoMaterial(I,"models/debug/debugwhite")
+        holoScale(I,vec(1,1.8,1))
+        holoColor(I,vec(215))
+        holoParent(I,Base)
+        holoAng(I,Base:toWorld(ang(0,0,0)))
+    }
+    holoPos(1,FrontPanel:toWorld(vec(-6,0.75,5.85)))
+    holoPos(2,FrontPanel:toWorld(vec(0,0.75,5.85)))
+    holoPos(3,FrontPanel:toWorld(vec(6,0.75,5.85)))
+    I1=((360/6)*randint(1,6))
+    I2=((360/6)*randint(1,6))
+    I3=((360/6)*randint(1,6))
+    FaceCount=6
+    DefAng=45+22.5
+    
+    SpinSpeed=10
+    
+    Price=10
+    
+    Line1=(Price/1.4)/1.5
+    Line2=round(Line1*2.2)
+    Line3=round(Line2*3.4)
+    Line4=round(Line3*2.1)
+    Line5=round(Line4*2)
+    Line6=round(Line5*1.8)
+    
+    #Debug
+    BalanceIn=200
+    
+    
+    if(I1==I2&I2==I3&I1==I3){
+        timer("reset",1000)
+    }
+    timer("model1",500)
+    Array=array(Line1,Line2,Line3,Line4,Line5,Line6)
+    WinPrice=Array[randint(4,6),number]
+}
+if(clk("reset")){
+    reset()
+}
+if(clk("model1")){
+    for(I=1,3){
+        I4=I+3
+        holoCreate(I4)
+        holoModel(I4,"models/sprops/misc/games/cards_diamonds.mdl")
+        holoSkin(I4,12)
+        holoScale(I4,vec(0.5))
+        holoParent(I4,holoEntity(I))
+        holoAng(I4,holoEntity(I):toWorld(ang(0,0,0)))
+        holoPos(I4,holoEntity(I):toWorld(vec(0,0,5.5)))
+    }
+    timer("model2",500)
+}
+if(clk("model2")){
+    for(I=1,3){
+        I4=I+6
+        holoCreate(I4)
+        holoModel(I4,"models/sprops/misc/alphanum/alphanum_dlsign.mdl")
+        holoScale(I4,vec(0.38,0.1,0.38))
+        holoParent(I4,holoEntity(I))
+        holoAng(I4,holoEntity(I):toWorld(ang(0,90,-90)))
+        holoPos(I4,holoEntity(I):toWorld(vec(-0.1,0,-5.25)))
+        holoBodygroup(I4,0,1)
+        holoColor(I4,vec(255,255,0))
+    }
+    timer("model3",500)
+}
+if(clk("model3")){
+    for(I=1,3){
+        I4=I+6+6
+        holoCreate(I4)
+        holoModel(I4,"models/balloons/balloon_classicheart.mdl")
+        holoScale(I4,vec(0.25,0.03,0.25))
+        holoParent(I4,holoEntity(I))
+        holoAng(I4,holoEntity(I):toWorld(ang(180,90,30)))
+        holoPos(I4,holoEntity(I):toWorld(vec(-5.6,0,-0.8)))
+        holoColor(I4,vec(255,0,0))
+        holoMaterial(I4,"models/debug/debugwhite")
+    }
+    timer("model4",500)
+}
+if(clk("model4")){
+    for(I=1,3){
+        I4=I+6+6+6
+        holoCreate(I4)
+        holoModel(I4,"models/sprops/cylinders/size_5/cylinder_12x3.mdl")
+        holoScale(I4,vec(0.25,0.25,0.25))
+        holoParent(I4,holoEntity(I))
+        holoAng(I4,holoEntity(I):toWorld(ang(180,90,120)))
+        holoPos(I4,holoEntity(I):toWorld(vec(4.5,0,2.5)))
+        holoColor(I4,vec(255,125,0))
+        holoMaterial(I4,"models/debug/debugwhite")
+    }
+    timer("model5",500)
+}
+if(clk("model5")){
+    for(I=1,3){
+        I4=I+6+6+6+6
+        holoCreate(I4)
+        holoModel(I4,"models/sprops/misc/alphanum/alphanum_7.mdl")
+        holoScale(I4,vec(0.4,0.5,0.4))
+        holoParent(I4,holoEntity(I))
+        holoAng(I4,holoEntity(I):toWorld(ang(180,90,-30)))
+        holoPos(I4,holoEntity(I):toWorld(vec(-4.5,0,1.6)))
+        holoBodygroup(I4,0,2)
+        holoColor(I4,vec(255,0,0))
+        holoMaterial(I4,"models/debug/debugwhite")
+    }
+    timer("model6",500)
+}
+if(clk("model6")){
+    for(I=1,3){
+        I4=I+6+6+6+6+6
+        
+        holoCreate(I4+3)
+        holoParent(I4+3,holoEntity(I))
+        holoAng(I4+3,holoEntity(I):toWorld(ang(180,90,-30)))
+        holoPos(I4+3,holoEntity(I):toWorld(vec(4.5,0,-1.6)))
+        holoAlpha(I4+3,0)
+        
+        holoCreate(I4)
+        holoModel(I4,"models/sprops/geometry/qdisc_12.mdl")
+        holoScale(I4,vec(0.5,0.5,0.5))
+        holoParent(I4,holoEntity(I))
+        holoAng(I4,holoEntity(I4+3):toWorld(ang(90+45,0,0)))
+        holoPos(I4,holoEntity(I):toWorld(vec(4.5,0,-1.6)))
+        holoBodygroup(I4,0,2)
+        holoColor(I4,vec(0,255,255))
+        holoMaterial(I4,"models/debug/debugwhite")
+    }
+    timer("ready",500)
+}
+if(clk("ready")){
+    Ready=1
+}
+if(Ready){
+if(BalanceIn>0){
+    Spins=round(BalanceIn/Price)
+}else{
+    Spins=0
+}
+if(Spins>0&changed(Start)&Start){
+    On=1
+    Base:soundPlay("button5",4,"buttons/button15.wav")
+}
+if(changed(Stop)&Stop){
+    if(!Spinning){
+        On=0
+        BalanceIn=200
+        if(BalanceIn>0){
+            Base:soundPlay("money",4,"ambient/levels/labs/equipment_printer_loop1.wav")
+        }else{
+            Base:soundPlay("button1",4,"buttons/button17.wav")
+        }
+    }
+}
+if(On){
+    if(Spinning){
+        if(changed(Button1)&Button1){
+            I1Stop=1
+            Base:soundPlay("button2",4,"buttons/button15.wav")
+        }
+        if(changed(Button2)&Button2){
+            I2Stop=1
+            Base:soundPlay("button3",4,"buttons/button15.wav")
+        }
+        if(changed(Button3)&Button3){
+            I3Stop=1
+            Base:soundPlay("button4",4,"buttons/button15.wav")
+        }
+        if(!I1Stop){
+            I1+=360/(SpinSpeed)
+        if(I1>=360){
+            I1=0
+        }
+        }else{
+            I1=I1Target
+        }
+        if(!I2Stop){
+            I2+=360/(SpinSpeed)
+        if(I2>=360){
+            I2=0
+        }
+        }else{
+            I2=I2Target
+        }
+        if(!I3Stop){
+            I3+=360/(SpinSpeed)
+        if(I3>=360){
+            I3=0
+        }
+        }else{
+            I3=I3Target
+        }
+        if(I3Stop&I2Stop&I1Stop){
+            Spinning=0
+        }
+    }else{
+        if(Spins>0){
+            if(Spin){
+                BalanceIn-=Price
+                Spinning=1
+                I1Stop=0
+                I2Stop=0
+                I3Stop=0
+            }
+        }
+    }
+}
+
+
+holoAng(1,Base:toWorld(ang(I1+DefAng,0,0)))
+holoAng(2,Base:toWorld(ang(I2+DefAng,0,0)))
+holoAng(3,Base:toWorld(ang(I3+DefAng,0,0)))
+
+for(Index=1,FaceCount){
+if(I1>(360/FaceCount)*(Index-1)&I1<(360/FaceCount)*Index){
+    I1Target=(360/FaceCount)*Index
+}
+if(I2>(360/FaceCount)*(Index-1)&I2<(360/FaceCount)*Index){
+    I2Target=(360/FaceCount)*Index
+}
+if(I3>(360/FaceCount)*(Index-1)&I3<(360/FaceCount)*Index){
+    I3Target=(360/FaceCount)*Index
+}
+}
+if(changed(Spinning)&Spinning){
+    TotalSpins+=1
+}
+Gained=Price*TotalSpins
+Profit=Gained-Lost
+if(changed(I3Stop&I2Stop&I1Stop)&I3Stop&I2Stop&I1Stop){
+if(I1==I2&I2==I3&I1==I3){
+    Base:soundPlay("win",4,"physics/metal/soda_can_impact_hard"+randint(1,3)+".wav")
+    if(I1==(360/FaceCount)*1){
+        BalanceIn+=Line1
+        WinPrice=Line1
+    }
+    if(I1==(360/FaceCount)*2){
+        BalanceIn+=Line2
+        WinPrice=Line2
+    }
+    if(I1==(360/FaceCount)*3){
+        BalanceIn+=Line3
+        WinPrice=Line3
+    }
+    if(I1==(360/FaceCount)*4){
+        BalanceIn+=Line4
+        WinPrice=Line4
+    }
+    if(I1==(360/FaceCount)*5){
+        BalanceIn+=Line5
+        WinPrice=Line5
+    }
+    if(I1==(360/FaceCount)*6){
+        BalanceIn+=Line6
+        WinPrice=Line6
+    }
+    Lost+=WinPrice
+}
+}
+}
+if(dupefinished()){
+    reset()
+}
